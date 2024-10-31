@@ -6,7 +6,9 @@ export const Table: React.FC = () => {
   const dispatch = useDispatch();
   const movies = useSelector((state: IMovieList) => state.movies);
   const [initialLoad, setInitialLoad] = useState(true);
-  const { sortBy, sortOrder } = useSelector((state) => state.sorting);
+  const { sortBy, sortOrder } = useSelector(
+    (state: IAppState) => state.sorting
+  );
 
   const handleSort = (field: "name" | "rating") => {
     dispatch(

@@ -17,6 +17,9 @@ export const Form: React.FC = () => {
     }
     dispatch(addMovie({ id: Date.now(), name, genre, rating }));
     console.log(genre, name, rating);
+    setName("");
+    setGenre("");
+    setRating(0);
   };
 
   return (
