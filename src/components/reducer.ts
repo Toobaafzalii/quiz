@@ -29,21 +29,27 @@ const reducer = (state = initialState, action: any): IAppState => {
           movie.id === action.payload.id ? action.payload : movie
         ),
       };
-    case "SORT_BY_NAME":
+    case "SORT":
+      const { sortBy, sortOrder } = action.payload;
+      const sortedMovies = [...state.movies].sort((a, b) => {
+        if (sortBy === "name") {
+          return sortOrder === "asc"
+            ? a.name.localeCompare(b.name)
+            : b.name.localeCompare(a.name);
+        } else if (sortBy === "rating") {
+          return sortOrder === "asc"
+            ? a.rating - b.rating
+            : b.rating - a.rating;
+        }
+        return 0;
+      });
       return {
         ...state,
         sorting: {
-          sortBy: "name",
-          sortOrder: state.sorting.sortOrder === "asc" ? "desc" : "asc",
+          sortBy,
+          sortOrder,
         },
-      };
-    case "SORT_BY_RATING":
-      return {
-        ...state,
-        sorting: {
-          sortBy: "rating",
-          sortOrder: state.sorting.sortOrder === "asc" ? "desc" : "asc",
-        },
+        movies: sortedMovies,
       };
     case "SET_MOVIES":
       return {
@@ -74,6 +80,11 @@ export const deleteMovie = (id: number) => ({
 export const editMovie = (movie: IMovie) => ({
   type: "EDIT",
   payload: movie,
+});
+
+export const setSorting = (sorting: ISortingState) => ({
+  type: "SORT",
+  payload: sorting,
 });
 
 export const setMovies = (movies: IMovie[]) => ({
